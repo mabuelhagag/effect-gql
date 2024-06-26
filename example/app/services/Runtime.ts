@@ -4,6 +4,6 @@ import { TodoRepoLive } from "./TodoRepo";
 import { TracingLive } from "./Tracing";
 import { remixRuntime } from "~/lib/effect";
 
-export const { effectLoader, effectAction } = remixRuntime(
+export const { effectLoader, effectAction, run } = remixRuntime(
   Layer.provide(TracingLive, Layer.mergeAll(TodoRepoLive, SqlLive))
 );

@@ -99,6 +99,7 @@ export const remixRuntime = <E, A>(layer: Layer.Layer<never, E, A>) => {
       run(Effect.provideService(body, ActionContext, args[0]));
 
   return {
+    run,
     effectLoader,
     effectAction,
   };
