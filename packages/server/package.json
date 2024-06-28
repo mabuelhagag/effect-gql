@@ -3,14 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "bin": {
-    "server": "dist/index.js"
-  },
   "scripts": {
-    "dev": "tsup src/index.ts --format esm --dts --watch",
-    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format cjs --dts --watch",
+    "build": "tsup src/index.ts --format cjs --dts",
     "test": "echo 'Add test script here'",
     "lint": "tsc"
   },
