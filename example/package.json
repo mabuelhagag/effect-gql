@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "vite build && vite build --ssr",
-    "dev": "NODE_ENV=development nodemon scripts/dev.js",
+    "dev": "NODE_ENV=development nodemon --exec tsx scripts/dev.ts",
     "start": "remix-serve build/index.js",
     "typecheck": "tsc",
     "clean": "rm -rf build && rm -rf public/build && rm -rf node_modules/.vite"
@@ -55,6 +55,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.1.4",
     "terser": "^5.24.0",
+    "tsx": "^4.15.8",
     "typescript": "^5.2.2",
     "vite": "^5.1.0",
     "vite-plugin-babel": "^1.2.0",
@@ -65,7 +66,7 @@
   },
   "nodemonConfig": {
     "watch": [
-      "scripts/dev.js"
+      "scripts/dev.ts"
     ]
   }
 }
