@@ -12,6 +12,7 @@
     "clean": "rm -rf build && rm -rf public/build && rm -rf node_modules/.vite"
   },
   "dependencies": {
+    "@apollo/client": "^3.10.8",
     "@effect-gql/server": "workspace:*",
     "@effect/opentelemetry": "^0.22.1",
     "@effect/schema": "^0.47.7",

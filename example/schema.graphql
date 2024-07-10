@@ -1,9 +1,7 @@
-scalar Date
-
 type ToDo {
   id: Int!
   title: String!
-  createdAt: Date!
+  createdAt: String! #Date!
 }
 
 type Query {

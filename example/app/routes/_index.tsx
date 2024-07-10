@@ -1,3 +1,4 @@
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Schema } from "@effect/schema";
 import type { MetaFunction } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
@@ -59,21 +60,32 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+const TODO_DELETE = gql`
+  mutation delete($id: Int!) {
+    delete(id: $id)
+  }
+`;
 function TodoRow({ todo }: { todo: Schema.Schema.From<typeof Todo> }) {
-  const fetcher = useFetcher<typeof action>();
-  const deleteTodoForm = useRef<HTMLFormElement>(null);
+  // const fetcher = useFetcher<typeof action>();
+  // const deleteTodoForm = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data) {
-      switch (fetcher.data) {
-        case "DeleteTodo": {
-          deleteTodoForm.current?.reset();
-          break;
-        }
-      }
-    }
-  }, [fetcher.state, fetcher.data]);
-
+  // useEffect(() => {
+  //   if (fetcher.state === "idle" && fetcher.data) {
+  //     switch (fetcher.data) {
+  //       case "DeleteTodo": {
+  //         deleteTodoForm.current?.reset();
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }, [fetcher.state, fetcher.data]);
+  const [deleteTodo] = useMutation(TODO_DELETE, {
+    refetchQueries: [TODOS_LIST],
+  });
+  const handleClick = async (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    await deleteTodo({ variables: { id: todo.id } });
+  };
   return (
     <li>
       <div style={{ display: "flex", gap: "0.5em" }}>
@@ -81,43 +93,79 @@ function TodoRow({ todo }: { todo: Schema.Schema.From<typeof Todo> }) {
           {todo.title} ({todo.createdAt})
         </div>
         <div>
-          <fetcher.Form method="post" ref={deleteTodoForm} action="?index">
+          {/* <fetcher.Form method="post" ref={deleteTodoForm} action="?index">
             <input type="hidden" name="_tag" value="DeleteTodo" />
             <input type="hidden" name="id" value={todo.id} />
             <button type="submit">Done</button>
-          </fetcher.Form>
+          </fetcher.Form> */}
+          <button onClick={handleClick}>Done</button>
         </div>
       </div>
     </li>
   );
 }
 
+const TODOS_LIST = gql`
+  query todosList {
+    todos {
+      id
+      title
+      createdAt
+    }
+  }
+`;
+
+const TODOS_ADD = gql`
+  mutation add($title: String!) {
+    add(title: $title) {
+      id
+      title
+      createdAt
+    }
+  }
+`;
 export default function Index() {
-  const todos = useLoaderData<typeof loader>();
-  const fetcher = useFetcher<typeof action>();
+  // const todos = useLoaderData<typeof loader>();
+  const {
+    loading: loadingQuery,
+    data,
+    refetch,
+  } = useQuery<{
+    todos: { id: number; title: string; createdAt: string }[];
+  }>(TODOS_LIST);
+  const [addTodo, { loading: loadingMutation }] = useMutation(TODOS_ADD);
+  // const fetcher = useFetcher<typeof action>();
   const addTodoForm = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data) {
-      switch (fetcher.data) {
-        case "AddTodo": {
-          addTodoForm.current?.reset();
-          break;
-        }
-      }
+  // useEffect(() => {
+  //   if (fetcher.state === "idle" && fetcher.data) {
+  //     switch (fetcher.data) {
+  //       case "AddTodo": {
+  //         addTodoForm.current?.reset();
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }, [fetcher.state, fetcher.data]);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const titleInput = form.elements.namedItem("title") as HTMLInputElement;
+    if (titleInput) {
+      const title = titleInput.value;
+      await addTodo({ variables: { title } });
+      refetch();
+      form.reset();
     }
-  }, [fetcher.state, fetcher.data]);
-
+  };
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Todos</h1>
       <ul>
-        {todos.map((todo) => (
-          <TodoRow todo={todo} key={todo.id} />
-        ))}
+        {data?.todos.map((todo) => <TodoRow todo={todo} key={todo.id} />)}
       </ul>
       <h2>Add New Todo</h2>
-      <fetcher.Form
+      {/* <fetcher.Form
         method="post"
         ref={addTodoForm}
         action="?index"
@@ -126,7 +174,11 @@ export default function Index() {
         <input type="hidden" name="_tag" value="AddTodo" />
         <input type="text" size={50} name="title" />
         <button type="submit">Create Todo</button>
-      </fetcher.Form>
+      </fetcher.Form> */}
+      <form onSubmit={handleSubmit} style={{ display: "flex", gap: "0.5em" }}>
+        <input type="text" size={50} name="title" />
+        <button type="submit">Create Todo</button>
+      </form>
     </div>
   );
 }
