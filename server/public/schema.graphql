@@ -1,0 +1,16 @@
+# scalar Date
+
+type ToDo {
+  id: Int!
+  title: String!
+  createdAt: String!
+}
+
+type Query {
+  todos: [ToDo]
+}
+
+type Mutation {
+  add(title: String!): ToDo
+  delete(id: Int!): Boolean
+}

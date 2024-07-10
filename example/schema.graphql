@@ -1,0 +1,14 @@
+type ToDo {
+  id: Int!
+  title: String!
+  createdAt: String! #Date!
+}
+
+type Query {
+  todos: [ToDo!]!
+}
+
+type Mutation {
+  addTodo(title: String!): ToDo
+  removeTodo(id: Int!): Boolean
+}

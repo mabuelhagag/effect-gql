@@ -1,0 +1,32 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "pnpm build:migrations && tsup src/index.ts --format cjs --dts --watch --onSuccess \"node dist/index.js\" --publicDir public",
+    "build": "pnpm build:migrations && tsup src/index.ts --format cjs --dts",
+    "build:migrations": "tsc --outDir dist/migrations ./src/migrations/0001_create_todos.ts  ./src/migrations/0002_add_todos.ts || true",
+    "test": "echo 'Add test script here'",
+    "lint": "tsc"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@effect/platform-node": "^0.53.17",
+    "@effect/schema": "^0.68.15",
+    "@effect/sql": "^0.4.18",
+    "@effect/sql-sqlite-node": "^0.4.18",
+    "@graphql-tools/utils": "^10.2.3",
+    "@sqlfx/sqlite": "^0.30.3",
+    "effect": "^3.4.6",
+    "glob": "^10.4.2",
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "nodemon": "^3.1.4",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  }
+}
