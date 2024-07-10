@@ -1,6 +1,5 @@
 import { fileURLToPath } from "url";
 import { createServer } from "vite";
-import { serve } from "@effect-gql/server";
 
 const __dirname = fileURLToPath(new URL("..", import.meta.url));
 
@@ -15,9 +14,3 @@ const __dirname = fileURLToPath(new URL("..", import.meta.url));
   await server.listen();
   server.printUrls();
 })();
-
-serve("schema.graphql", {
-  Query: {
-    todos: [],
-  },
-});
