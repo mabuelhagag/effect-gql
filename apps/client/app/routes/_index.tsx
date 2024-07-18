@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 
-import { TodoRepo } from "~/services/TodoRepo";
+import { TodoService } from "~/services/Todo";
 import { loaderFunction } from "~/services/index";
 import { Todo } from "../types/Todo";
 
@@ -49,7 +49,7 @@ export const AddTodoForm = () => {
   );
 };
 
-export const loader = loaderFunction(() => TodoRepo.getAllTodos);
+export const loader = loaderFunction(() => TodoService.getAllTodos);
 
 export default function Index() {
   const todos = useLoaderData<typeof loader>();

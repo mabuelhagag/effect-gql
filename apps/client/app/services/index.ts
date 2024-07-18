@@ -1,7 +1,7 @@
 import { Layer } from "effect";
 import { makeRemixRuntime } from "~/lib/utilities";
-import { TodoRepo } from "./TodoRepo";
+import { TodoService } from "./Todo";
 
 export const { loaderFunction } = makeRemixRuntime(
-  Layer.mergeAll(TodoRepo.Live)
+  Layer.mergeAll(TodoService.Live)
 );

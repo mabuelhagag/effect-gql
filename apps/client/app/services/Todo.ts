@@ -1,7 +1,7 @@
 import { Effect, Layer } from "effect";
 import { Todo } from "~/types/Todo";
 
-const makeTodoRepo = Effect.sync(() => {
+const makeTodoService = Effect.sync(() => {
   return {
     getAllTodos: Effect.gen(function* () {
       const todos = [
@@ -18,9 +18,9 @@ const makeTodoRepo = Effect.sync(() => {
   };
 });
 
-export class TodoRepo extends Effect.Tag("@services/TodoRepo")<
-  TodoRepo,
-  Effect.Effect.Success<typeof makeTodoRepo>
+export class TodoService extends Effect.Tag("@services/Todo")<
+  TodoService,
+  Effect.Effect.Success<typeof makeTodoService>
 >() {
-  static Live = Layer.effect(this, makeTodoRepo);
+  static Live = Layer.effect(this, makeTodoService);
 }
