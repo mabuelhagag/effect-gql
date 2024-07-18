@@ -1,0 +1,19 @@
+query todosList {
+  todos {
+    id
+    title
+    createdAt
+  }
+}
+
+mutation addTodo($title: String!) {
+  add(title: $title) {
+    id
+    title
+    createdAt
+  }
+}
+
+mutation deleteTodo($id: Int!) {
+  delete(id: $id)
+}
