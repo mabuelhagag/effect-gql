@@ -19,6 +19,7 @@ import { EnvLive } from "./Sql";
 export class Todo extends Schema.Class<Todo>("Todo")({
   id: Schema.Number,
   title: Schema.String,
+  status: Schema.Literal("COMPLETED", "ACTIVE"),
   createdAt: Schema.DateFromString,
 }) {}
 
@@ -44,7 +45,7 @@ const retryPolicy = Schedule.exponential("10 millis").pipe(
 const getAllTodosErrorCount = Metric.counter("getAllTodosErrorCount");
 const addTodoErrorCount = Metric.counter("addTodoErrorCount");
 const deleteTodoErrorCount = Metric.counter("deleteTodoErrorCount");
-
+const flipTodoStatusErrorCount = Metric.counter("flipTodoStatusErrorCount");
 //
 // Service Definition
 //
@@ -92,6 +93,30 @@ export const makeTodoRepo = Effect.gen(function* ($) {
       Effect.withSpan("deleteTodo")
     );
 
+  const flipTodoStatus = (id: number) =>
+    Effect.gen(function* ($) {
+      yield* $(
+        Effect.orDie(
+          sql`UPDATE todos SET status = CASE 
+          WHEN status = 'COMPLETED' THEN 'ACTIVE' 
+          ELSE 'COMPLETED' END WHERE id = ${id}`
+        ),
+        Effect.withSpan("flipTodoStatus")
+      );
+      const rows = yield* $(
+        Effect.orDie(sql`SELECT * FROM todos WHERE id = ${id}`),
+        Effect.withSpan("getFromDb")
+      );
+      const [todo] = yield* $(
+        Effect.orDie(Schema.decodeUnknown(Schema.Tuple(Todo))(rows)),
+        Effect.withSpan("parseResponse")
+      );
+      return todo;
+    }).pipe(
+      sql.withTransaction,
+      Metric.trackErrorWith(flipTodoStatusErrorCount, () => 1),
+      Effect.withSpan("flipTodoStatus")
+    );
   const getAllTodos = Effect.gen(function* ($) {
     const rows = yield* $(
       Effect.orDie(sql`SELECT * from todos;`),
@@ -120,6 +145,7 @@ export const makeTodoRepo = Effect.gen(function* ($) {
     getAllTodos,
     addTodo,
     deleteTodo,
+    flipTodoStatus,
   };
 });
 

@@ -8,6 +8,7 @@ export default Effect.gen(function* ($) {
     CREATE TABLE todos (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title VARCHAR(255) NOT NULL,
+        status TEXT CHECK(status IN ('COMPLETED', 'ACTIVE')) DEFAULT 'ACTIVE',
         created_at datetime NOT NULL DEFAULT current_timestamp
     )`);
 });

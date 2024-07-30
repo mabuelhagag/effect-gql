@@ -1,8 +1,13 @@
 # scalar Date
+enum Status {
+  ACTIVE
+  COMPLETED
+}
 
 type ToDo {
   id: Int!
   title: String!
+  status: Status!
   createdAt: String!
 }
 
