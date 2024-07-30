@@ -13,12 +13,11 @@
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",
-    "@effect/platform-node": "^0.53.17",
-    "@effect/schema": "^0.68.15",
-    "@effect/sql": "^0.4.18",
-    "@effect/sql-sqlite-node": "^0.4.18",
+    "@effect/platform-node": "^0.54.3",
+    "@effect/schema": "^0.68.26",
+    "@effect/sql": "^0.5.2",
+    "@effect/sql-sqlite-node": "^0.5.2",
     "@graphql-tools/utils": "^10.2.3",
-    "@sqlfx/sqlite": "^0.30.3",
     "effect": "^3.4.6",
     "glob": "^10.4.2",
     "graphql": "^16.9.0"
