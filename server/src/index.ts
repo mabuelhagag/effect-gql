@@ -28,6 +28,11 @@ const resolvers: IResolvers = {
         Effect.provide(TodoRepoLive),
         Effect.runPromise
       ),
+    flip: (_, args, __) =>
+      Effect.flatMap(TodoRepo, (todo) => todo.flipTodoStatus(args.id)).pipe(
+        Effect.provide(TodoRepoLive),
+        Effect.runPromise
+      ),
   },
 };
 export const serve = async (schemaFile: string, resolvers: any) => {
