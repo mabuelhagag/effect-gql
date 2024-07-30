@@ -12,6 +12,7 @@
     "clean": "rm -rf build && rm -rf public/build && rm -rf node_modules/.vite"
   },
   "dependencies": {
+    "@effect/platform": "^0.59.1",
     "@effect/schema": "^0.68.26",
     "@remix-run/react": "^2.9.1",
     "@remix-run/serve": "^2.9.1",
