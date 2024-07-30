@@ -1,8 +1,0 @@
-overwrite: true
-schema: ../server/public/schema.graphql
-documents: "./app/**/*.tsx"
-generates:
-  ./app/generated/:
-    preset: client
-    plugins:
-      - typescript-react-apollo
