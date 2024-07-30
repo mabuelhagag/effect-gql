@@ -4,8 +4,8 @@ import { Effect, flow } from "effect";
 export class Todo extends Schema.Class<Todo>("Todo")({
   id: Schema.Number,
   title: Schema.String,
-  createdAt: Schema.DateFromString,
-  status: Schema.Literal("CREATED", "COMPLETED"),
+  createdAt: Schema.String,
+  status: Schema.Literal("ACTIVE", "COMPLETED"),
 }) {
   static encodeArray = flow(
     Schema.encode(Schema.Array(this)),
